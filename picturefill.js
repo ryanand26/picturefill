@@ -30,7 +30,7 @@
 		//if we've a srcset then parse this
 		if (attrValue) {
 			srcset = getSrcsetHash(attrValue);
-			matchedSrc = srcset ? getSrcFromSrcsetArray(srcset, pixelRatio) : false;
+			matchedSrc = srcset ? getSrcFromSrcsetHash(srcset, pixelRatio) : false;
 			if (matchedSrc) {
 				return matchedSrc;
 			}
@@ -59,24 +59,28 @@
 			density = srcSetElement[1] ? srcSetElement[1].trim() : "1x";
 			source = srcSetElement[0].trim();
 			hash[density] = source;
+			hash.count += 1;
 		}
 		return hash;
 	}
 	/**
 	 * Returns the proper src from the srcSet property
 	 * Get the first valid element from passed position to the left
-	 * @param {Array} srcsetArray
+	 * @param {Object} srcsetData
 	 * @param {int} position
 	 * @returns {string}
 	 * @author PicturePolyfill
 	 */
-	function getSrcFromSrcsetArray(srcsetArray, position) {
-		var ret;
-		do {
-			ret = srcsetArray[position+'x'];
-			position-=1;
+	function getSrcFromSrcsetHash(srcsetData, position) {
+		var ret,
+			i = srcsetData.count;
+		while (i > 0) {
+			ret = srcsetData[position+'x'];
+			if (ret) {
+				break;
+			}
+			i--;
 		}
-		while (ret===undefined && position>0);
 		return ret;
 	}
 
