@@ -13,15 +13,15 @@
 	</head>
 	<body>
 		
-		<h1>Picturefill: A &lt;picture&gt; element polyfill</h1>
+		<h1>Picturefill + PicturePolyfill</h1>
 				
-		<p>For more info: <a href="http://github.com/scottjehl/picturefill">see project home.</a></p>
+		<p><a href="http://github.com/scottjehl/picturefill">Picturefill</a> &amp; <a href="https://github.com/verlok/picturePolyfill">Picturefill</a></p>
 		
 		<span class="picture-element" data-alt="A giant stone face at The Bayon temple in Angkor Thom, Cambodia">
-			<span data-src="external/imgs/small.jpg"></span>
+			<span data-srcset="http://placehold.it/180x240, http://placehold.it/360x480 2x"></span>
 			<span data-src="external/imgs/medium.jpg" data-media="(min-width: 400px)"></span>
 			<span data-src="external/imgs/large.jpg" data-media="(min-width: 800px)"></span>
-			<span data-src="external/imgs/extralarge.jpg" data-media="(min-width: 1000px)"></span>
+			<span data-srcset="http://placehold.it/768x1024, http://placehold.it/1536x2048 2x" data-media="(min-width: 1000px)"></span>
 
 			<!-- Fallback content for non-JS browsers is just text content. -->
 			<img alt="A giant stone face at The Bayon temple in Angkor Thom, Cambodia">

@@ -4,6 +4,7 @@
 projects browser list. (The original polyfill excellent though, looking forward to the discussed updates)
 * Requires getElementsByClassName or querySelectorAllBrowser so support is lower then the original.
 * Removed the noscript and default image src.
+* Used elements of PicturePolyfill (https://github.com/verlok/picturePolyfill) to implement devicePixelRatio in the form of 1x 2x rather than media query
 
 
 # Picturefill

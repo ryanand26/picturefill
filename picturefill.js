@@ -1,10 +1,14 @@
 /*! Picturefill - Responsive Images that work today. (and mimic the proposed Picture element with span elements). Author: Scott Jehl, Filament Group, 2012 | License: MIT/GPLv2 */
 /*! Amended to use a class name for the select, Requires getElementsByClassName or querySelectorAll */
+/*! Includes elements of PicturePolyfill - Author: Andrea Verlicchi | License: MIT/GPLv2 */
+
 
 (function( w ){
 
 	// Enable strict mode
 	"use strict";
+
+	var hasMatchMedia, pixelRatio;
 
 	function getPictures (context) {
 		var className = "picture-element",
@@ -19,9 +23,69 @@
 		return ps;
 	}
 
+	function getImageSrc (elem) {
+		var attrValue = elem.getAttribute( "data-srcset" ),
+			srcset, matchedSrc;
+
+		//if we've a srcset then parse this
+		if (attrValue) {
+			srcset = getSrcsetHash(attrValue);
+			matchedSrc = srcset ? getSrcFromSrcsetArray(srcset, pixelRatio) : false;
+			if (matchedSrc) {
+				return matchedSrc;
+			}
+		}
+		//otherwise return the src attr
+		return elem.getAttribute( "data-src" );
+	}
+
+	/**
+	 * Returns a hash density > sourceSet
+	 * @param {string} srcsetAttribute
+	 * @returns {object}
+	 * @author PicturePolyfill
+	 */
+	function getSrcsetHash(srcsetAttribute) {
+		var srcSetElement,
+			source,
+			density,
+			hash = {
+				count : 0
+			},
+			srcSetElements = srcsetAttribute.split(',');
+
+		for (var i=0, len=srcSetElements.length; i<len; i+=1) {
+			srcSetElement = srcSetElements[i].trim().split(' ');
+			density = srcSetElement[1] ? srcSetElement[1].trim() : "1x";
+			source = srcSetElement[0].trim();
+			hash[density] = source;
+		}
+		return hash;
+	}
+	/**
+	 * Returns the proper src from the srcSet property
+	 * Get the first valid element from passed position to the left
+	 * @param {Array} srcsetArray
+	 * @param {int} position
+	 * @returns {string}
+	 * @author PicturePolyfill
+	 */
+	function getSrcFromSrcsetArray(srcsetArray, position) {
+		var ret;
+		do {
+			ret = srcsetArray[position+'x'];
+			position-=1;
+		}
+		while (ret===undefined && position>0);
+		return ret;
+	}
+
+	/* Picturefill */
 	w.picturefill = function() {
-		var ps = getPictures(w.document),
-			hasMatchMedia = (w.matchMedia && true);
+		var ps = getPictures(w.document);
+
+		hasMatchMedia = (w.matchMedia && true);
+		pixelRatio = (w.devicePixelRatio) ? Math.ceil(w.devicePixelRatio) : 1;
 
 		// Loop the pictures, assumes all found elements are to be parsed
 		for( var i = 0, il = ps.length; i < il; i++ ){
@@ -52,7 +116,7 @@
 					continue;
 				}
 
-				picImg.src =  matchedEl.getAttribute( "data-src" );
+				picImg.src = getImageSrc(matchedEl);
 				matchedEl.appendChild( picImg );
 				picImg.removeAttribute("width");
 				picImg.removeAttribute("height");
