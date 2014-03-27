@@ -1,3 +1,11 @@
+**Amends:** 
+
+* Select using a class of "picture-element" rather than data-attribute as it will work better with my current
+projects browser list. (The original polyfill excellent though, looking forward to the discussed updates)
+* Requires getElementsByClassName or querySelectorAllBrowser so support is lower then the original.
+* Removed the noscript and default image src.
+
+
 # Picturefill
 A Responsive Images approach that you can use today that mimics the [proposed picture element](http://www.w3.org/TR/2013/WD-html-picture-element-20130226/) using `span`s, for safety sake.
 
