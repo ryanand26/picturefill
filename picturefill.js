@@ -20,12 +20,12 @@
 	}
 
 	w.picturefill = function() {
-		var ps = getPictures(w.document);
+		var ps = getPictures(w.document),
+			hasMatchMedia = (w.matchMedia && true);
 
-		// Loop the pictures
+		// Loop the pictures, assumes all found elements are to be parsed
 		for( var i = 0, il = ps.length; i < il; i++ ){
-			
-			//assumes all found elements are to be parsed
+
 			var sources = ps[ i ].getElementsByTagName( "span" ),
 				matches = [];
 
@@ -33,7 +33,7 @@
 			for( var j = 0, jl = sources.length; j < jl; j++ ){
 				var media = sources[ j ].getAttribute( "data-media" );
 				// if there's no media specified, OR w.matchMedia is supported 
-				if( !media || ( w.matchMedia && w.matchMedia( media ).matches ) ){
+				if( !media || ( hasMatchMedia && w.matchMedia( media ).matches ) ){
 					matches.push( sources[ j ] );
 				}
 			}
