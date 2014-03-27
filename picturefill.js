@@ -1,28 +1,42 @@
 /*! Picturefill - Responsive Images that work today. (and mimic the proposed Picture element with span elements). Author: Scott Jehl, Filament Group, 2012 | License: MIT/GPLv2 */
+/*! Amended to use a class name for the select, Requires getElementsByClassName or querySelectorAll */
 
 (function( w ){
 
 	// Enable strict mode
 	"use strict";
 
+	function getPictures (context) {
+		var className = "picture-element",
+			ps = [];
+
+		if (context.getElementsByClassName) {
+			ps = context.getElementsByClassName(className);
+		}
+		else if (context.querySelectorAll) {
+			ps = context.querySelectorAll('.' + className);
+		}
+		return ps;
+	}
+
 	w.picturefill = function() {
-		var ps = w.document.getElementsByTagName( "span" );
+		var ps = getPictures(w.document);
 
 		// Loop the pictures
 		for( var i = 0, il = ps.length; i < il; i++ ){
-			if( ps[ i ].getAttribute( "data-picture" ) !== null ){
+			
+			//assumes all found elements are to be parsed
+			var sources = ps[ i ].getElementsByTagName( "span" ),
+				matches = [];
 
-				var sources = ps[ i ].getElementsByTagName( "span" ),
-					matches = [];
-
-				// See if which sources match
-				for( var j = 0, jl = sources.length; j < jl; j++ ){
-					var media = sources[ j ].getAttribute( "data-media" );
-					// if there's no media specified, OR w.matchMedia is supported 
-					if( !media || ( w.matchMedia && w.matchMedia( media ).matches ) ){
-						matches.push( sources[ j ] );
-					}
+			// See if which sources match
+			for( var j = 0, jl = sources.length; j < jl; j++ ){
+				var media = sources[ j ].getAttribute( "data-media" );
+				// if there's no media specified, OR w.matchMedia is supported 
+				if( !media || ( w.matchMedia && w.matchMedia( media ).matches ) ){
+					matches.push( sources[ j ] );
 				}
+			}
 
 			// Find any existing img element in the picture element
 			var picImg = ps[ i ].getElementsByTagName( "img" )[ 0 ];
@@ -46,7 +60,6 @@
 			else if( picImg ){
 				picImg.parentNode.removeChild( picImg );
 			}
-		}
 		}
 	};
 
